@@ -200,7 +200,8 @@ class ProductionPlanner:
             if product_type[p] == "purchased":
                 continue
 
-            production_bound = float(gross_requirement.get(p, 0.0))
+            gross_bound = float(gross_requirement.get(p, 0.0))
+            production_bound = max(gross_bound, min_lot[p]) if gross_bound > 0.0 else 0.0
             for t in periods:
                 release_period = t - lead_time[p]
                 if release_period < 1 or production_bound <= 0.0:
