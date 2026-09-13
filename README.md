@@ -10,6 +10,7 @@ The project models finished-goods demand, bill-of-material relationships, invent
 - Inventory balance by product and period
 - Routing-based capacity consumption
 - Finite resource capacity by period
+- Date-based capacity-calendar conversion for shifts, maintenance, and shutdowns
 - Production lead-time offsets
 - Binary setup decisions
 - Setup-time capacity consumption
@@ -157,6 +158,33 @@ setup_minutes
 
 All routing times are expressed in minutes and are converted to hours inside the resource-capacity constraints.
 
+## Date-based capacity calendars
+
+Operational capacity data often arrives as dated shift or maintenance records rather than integer planning periods. `capacity_calendar_to_periods` converts those records into the planner's capacity table.
+
+```python
+import pandas as pd
+from production_planning import capacity_calendar_to_periods
+
+calendar = pd.DataFrame(
+    {
+        "resource_id": ["Machine1", "Machine1", "Machine1", "Labor"],
+        "date": ["2026-01-01", "2026-01-01", "2026-01-02", "2026-01-02"],
+        "capacity_hours": [8, 8, 0, 40],
+    }
+)
+
+capacity = capacity_calendar_to_periods(
+    calendar,
+    planning_start="2026-01-01",
+    horizon_periods=30,
+)
+```
+
+Multiple rows for the same resource and date are summed, so separate shifts can be supplied independently. Explicit zero-capacity rows represent maintenance or shutdown days. Dates before `planning_start` are rejected, and rows beyond an optional horizon are discarded.
+
+The planner treats a missing resource-period combination as zero capacity. Therefore the source calendar should include every date on which a resource has available capacity; it should not contain only exception days.
+
 ## Objective
 
 The objective minimizes a weighted combination of:
@@ -182,6 +210,7 @@ pip install -r requirements.txt
 On Windows PowerShell:
 
 ```powershell
+python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
@@ -206,6 +235,7 @@ src/production_planning/
     bom.py
     atp.py
     pegging.py
+    calendar.py
     validation.py
 examples/
 tests/
