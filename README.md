@@ -1,4 +1,18 @@
-# Multi-Level Production Planning MILP
+# Production Planning Optimization
+
+<!-- portfolio-umbrella:start -->
+## Portfolio role
+
+This repository is the primary umbrella repository for this Jors Academy research area. Related projects have been consolidated under `projects/` so the methods, implementations, experiments, and case studies can be maintained and explored from one place.
+
+### Included projects
+
+- [`ellipsoidal-robust-production-planning-socp`](projects/ellipsoidal-robust-production-planning-socp/)
+- [`multi-product-demand-allocation-milp`](projects/multi-product-demand-allocation-milp/)
+- [`two-stage-stochastic-capacity-planning`](projects/two-stage-stochastic-capacity-planning/)
+
+Each consolidated project keeps its own files and a `SOURCE_REPOSITORY.md` provenance record. The snapshot preserves the source repository's default-branch files at consolidation time; repository-level history and metadata remain separate from the snapshot.
+<!-- portfolio-umbrella:end -->
 
 A compact reference implementation of a capacity-constrained, multi-level production planning model built with Python and PuLP.
 
